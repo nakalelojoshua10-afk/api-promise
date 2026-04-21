@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use App\Traits\UUID;
+use Illuminate\Database\Eloquent\Model;
+
+class StoreBallance extends Model
+{
+    use UUID;
+
+    protected $fillable = [
+        'store_id',
+        'balance'
+    ];
+
+    protected $cast = [
+        'balance' => 'decimal:2'
+    ];
+
+    //store balance is owned by one store
+
+    public function store() {
+        return $this->belongsTo(Store::class);
+    }
+
+    public function storeBallanceHistories() {
+        return $this->hasMany(StoreBallanceHistory::class);
+    }
+}
