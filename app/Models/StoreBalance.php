@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
-class StoreBallance extends Model
+class StoreBalance extends Model
 {
     use UUID;
 
@@ -24,7 +24,11 @@ class StoreBallance extends Model
         return $this->belongsTo(Store::class);
     }
 
-    public function storeBallanceHistories() {
-        return $this->hasMany(StoreBallanceHistory::class);
+    public function storeBalanceHistories() {
+        return $this->hasMany(StoreBalanceHistory::class);
+    }
+
+    public function withdrawals(){
+        return $this->hasMany(Withdrawal::class);
     }
 }

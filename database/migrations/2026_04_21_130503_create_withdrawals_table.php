@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('store_balance_histories', function (Blueprint $table) {
+        Schema::create('withdrawals', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('store_balance_id');
             $table->foreign('store_balance_id')->references('id')->on('stores')->onDelete('cascade');
-            $table->enum('type', ['income', 'withdraw']);
-            $table->uuid('reference_id');
-            $table->string('reference_type');
-            $table->decimal('amount', 26, 2);
-            $table->string('remarks');
+            $table->decimal('amount',26 ,2);
+            $table->string('bank_account_name');
+            $table->string('bank_account_number');
+            $table->string('bank_name');
+            $table->enum('status', ['[pending', 'approved', 'rejected']);
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('store_balance_histories');
+        Schema::dropIfExists('withdrawals');
     }
 };

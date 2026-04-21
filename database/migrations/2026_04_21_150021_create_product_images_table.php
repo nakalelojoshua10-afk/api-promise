@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('store_balances', function (Blueprint $table) {
+        Schema::create('product_images', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('store_id');
-            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
-            $table->decimal('balance', 26, 2);
+            $table->uuid('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->string('image');
+            $table->boolean('is_thumbnail')->default(false);  
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('store_balances');
+        Schema::dropIfExists('product_images');
     }
 };

@@ -24,11 +24,19 @@ class Store extends Model
     ];
 
     //relationship one store has one user
-    public function user () {
+    public function user() {
         return $this->belongsTo(User::class);
     }  
     
-    public function storeBallance() {
-        return $this->hasOne(StoreBallance::class);
+    public function storeBalance() {
+        return $this->hasOne(StoreBalance::class);
+    }
+
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
+
+    public function transactions(){
+        return $this->hasMany(Transaction::class);
     }
 }
