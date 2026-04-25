@@ -10,7 +10,7 @@ interface UserRepositoryInterface {
         bool $execute,
     );
 
-    public function geatAllPaginated(
+    public function getAllPaginated(
         ?string $search,
         ?int $rowPerPage,
     );

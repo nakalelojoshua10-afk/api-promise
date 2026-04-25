@@ -24,7 +24,7 @@ class UserRepository implements UserRepositoryInterface {
         return $query;
     }
 
-    public function geatAllPaginated(?string $search, ?int $rowPerPage)
+    public function getAllPaginated(?string $search, ?int $rowPerPage)
     {
         $query = $this->getAll(
             $search,
