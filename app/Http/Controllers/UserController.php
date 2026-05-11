@@ -75,7 +75,29 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+        $user = $this->userRepository->getById($id);
+
+        if(!$user) {
+            return ResponseHelper::jsonResponse(
+            true, 
+            'Data User Tidak Ditemukan', 
+            null, // NOT UserRepositoryInterface
+            404
+            );
+        }
+
+        // Pass UserResource::class so the paginator knows how to format each user
+        return ResponseHelper::jsonResponse(
+        true, 
+        'Data User Berhasil Diambil', 
+        new UserResource($user), // NOT UserRepositoryInterface
+        200
+        );
+
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }   
     }
 
     /**
