@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Interfaces;
+namespace App\Repositories;
 
 use App\Models\User;
+use App\Interfaces\UserRepositoryInterface;
 
 class UserRepository implements UserRepositoryInterface {
     public function getAll(?string $search, ?int $limit, bool $execute)
