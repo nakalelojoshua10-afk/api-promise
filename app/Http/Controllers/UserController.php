@@ -44,12 +44,18 @@ class UserController extends Controller
         ]);
 
         try {
-            $users  = $this->userRepository->getAllPaginated(
-                $request['search'] ?? null,
-                $request['row_per_page']
-            );
+        $users = $this->userRepository->getAllPaginated(
+            $request['search'] ?? null,
+            $request['row_per_page']
+        );
 
-            return ResponseHelper::jsonResponse(true, 'Data User Berhasil Diambil', PaginateResource::make($users, UserRepositoryInterface::class), 200);
+        // Pass UserResource::class so the paginator knows how to format each user
+        return ResponseHelper::jsonResponse(
+        true, 
+        'Data User Berhasil Diambil', 
+        PaginateResource::make($users, UserResource::class), // NOT UserRepositoryInterface
+        200
+        );
 
         } catch (\Exception $e) {
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);

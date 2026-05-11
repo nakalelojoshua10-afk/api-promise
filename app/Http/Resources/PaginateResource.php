@@ -31,16 +31,16 @@ class PaginateResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'data' => $this->collect($this->items()),
+            // Use getCollection() to get the actual array of User models
+            'data' => $this->resourceClass::collection($this->resource->getCollection()),
+            
             'meta' => [
-                'current_page' => $this->currentPage(),
-                'from' => $this->firstItem(),
-                'last_page' => $this->lastPage(),
-                'path' => $this->path(),
-                'per_page' => $this->perPage(),
-                'to' => $this->lastItem(),
-                'total' => $this->total(),
+                'current_page' => $this->resource->currentPage(),
+                'last_page'    => $this->resource->lastPage(),
+                'per_page'     => $this->resource->perPage(),
+                'total'        => $this->resource->total(),
             ],
+
         ];
     }
 }
