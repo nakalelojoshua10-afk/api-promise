@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 
 class UserRepository implements UserRepositoryInterface {
+
     public function getAll(?string $search, ?int $limit, bool $execute)
     {
         $query = User::where(function ($query) use ($search) {
@@ -40,20 +41,54 @@ class UserRepository implements UserRepositoryInterface {
 
     public function getById(?string $id)
     {
-        $query = User::where('id', $id);
-        return $query->first();
+        return User::find($id);
     }
 
     public function create(array $data)
     {
-        DB::beginTransaction(); // Added leading backslash for safety
+        DB::beginTransaction();
 
         try {
-            $user = new User;
-            // FIX: Use [] instead of ()
+            $user = User::create([
+                'name'     => $data['name'],
+                'email'    => $data['email'],
+                'password' => $data['password'], 
+            ]);
+
+            DB::commit();
+            return $user;
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Repository Error: " . $e->getMessage());
+        }
+    }
+
+    public function update(string $id, array $data)
+    {
+        DB::beginTransaction();
+
+        try {
+            // FIX 1: Retrieve the EXISTING user from the database
+            $user = User::find($id);
+
+            if (!$user) {
+                throw new \Exception("User not found");
+            }
+
+            // FIX 2: Update the fields on the existing object
             $user->name = $data['name']; 
-            $user->email = $data['email'];
-            $user->password = bcrypt($data['password']);
+
+            // Only update email if it's provided
+            if (isset($data['email'])) {
+                $user->email = $data['email'];
+            }
+
+            if (isset($data['password'])) {
+                $user->password = $data['password']; // Hashing is handled by casts in User.php
+            }
+
+            // FIX 3: save() will now perform an UPDATE because $user has an ID
             $user->save();
 
             DB::commit();
@@ -62,8 +97,6 @@ class UserRepository implements UserRepositoryInterface {
 
         } catch (\Exception $e) {
             DB::rollBack();
-
-            // Use a leading backslash so PHP knows you mean the global Exception class
             throw new \Exception($e->getMessage());
         }
     }

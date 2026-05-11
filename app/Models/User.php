@@ -16,14 +16,9 @@ use Illuminate\Notifications\Notifiable;
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, UUID;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @var list<string>
-     */
+    // Ensure this is exactly like this
     protected $fillable = [
         'name',
         'email',
