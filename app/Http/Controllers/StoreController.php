@@ -1,0 +1,97 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Helpers\ResponseHelper;
+use App\Http\Resources\PaginateResource;
+use App\Http\Resources\StoreResource;
+use App\Interfaces\StoreRepositoryInterface;
+use Illuminate\Http\Request;
+
+class StoreController extends Controller
+{
+
+    private StoreRepositoryInterface $storeRepository;
+
+    public function __construct(StoreRepositoryInterface $storeRepository) {
+        $this->storeRepository = $storeRepository;
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+         try {
+            $stores = $this->storeRepository->getAll(
+                $request->search,
+                $request->is_verified,
+                $request->limit,
+                true
+            );
+
+            return ResponseHelper::jsonResponse(true, 'Data Toko Berhasil Diambil', StoreResource::collection($stores), 200);
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
+    public function getAllPaginated(Request $request)
+    {
+        // FIX: Store the validated array in a separate variable to avoid overwriting the Request object
+        $validated = $request->validate([
+            'search' => 'nullable|string',
+            'is_verified' => 'nullable|boolean',
+            'row_per_page' => 'required|int',
+        ]);
+
+        try {
+            $stores = $this->storeRepository->getAllPaginated(
+                $validated['search'] ?? null,
+                $validated['is_verified'] ?? null,
+                $validated['row_per_page']
+            );
+
+            return ResponseHelper::jsonResponse(
+                true, 
+                'Data Toko Berhasil Diambil', 
+                PaginateResource::make($stores, StoreResource::class), 
+                200
+            );
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+}
