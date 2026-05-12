@@ -141,6 +141,25 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        // Logic for destroy would go here
+        try {
+            // Logic check: verify user exists before attempting update
+            $userExists = $this->userRepository->getById($id);
+
+            if (!$userExists) {
+                return ResponseHelper::jsonResponse(false, 'Data User Tidak Ditemukan', null, 404);
+            }
+
+            // The repository handles the actual UPDATE logic
+            $user = $this->userRepository->delete($id);
+
+            return ResponseHelper::jsonResponse(
+                true, 
+                'Data User Berhasil Dihapus', 
+                new UserResource($user), 
+                200
+            );
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
     }
 }
