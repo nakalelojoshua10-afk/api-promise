@@ -23,6 +23,16 @@ class Store extends Model
 
     ];
 
+    protected $casts = [
+        'is_verified' => 'boolean',
+    ];
+
+    public function scopeSearch($query, $search)
+    {
+    return $query->where('name', 'like', "%{$search}%")
+                 ->orWhere('phone', 'like', "%{$search}%");
+    }
+
     //relationship one store has one user
     public function user() {
         return $this->belongsTo(User::class);
