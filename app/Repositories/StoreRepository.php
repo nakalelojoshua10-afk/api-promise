@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Interfaces\StoreRepositoryInterface;
 use App\Models\Store;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
 class StoreRepository implements StoreRepositoryInterface {
     public function getAll(?string $search,?bool $isVerified, ?int $limit, bool $execute)
@@ -47,5 +49,33 @@ class StoreRepository implements StoreRepositoryInterface {
         $query = Store::where('id', $id);
 
         return $query->first();
+    }
+
+    public function create(
+        ?array $data
+    ){
+        DB::beginTranscation();
+
+        try {
+            $store = new Store;
+            $store->user_id = $data['user_id'];
+            $store->name = $data['name'];
+            $store->logo = $data['logo']->store('assets/store', 'public');
+            $store->about = $data['about'];
+            $store->phone = $data['phone'];
+            $store->address_id = $data['address_id'];
+            $store->city = $data['city'];
+            $store->address = $data['address'];
+            $store->postal_code = $data['postal_code'];
+            $store->save();
+
+            $store->storeBalance()->create(['balance' =>0]);
+
+            DB::commit();
+
+            return $store;
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 }
