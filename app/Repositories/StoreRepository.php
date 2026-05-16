@@ -6,6 +6,7 @@ use App\Interfaces\StoreRepositoryInterface;
 use App\Models\Store;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Override;
 
 class StoreRepository implements StoreRepositoryInterface {
     public function getAll(?string $search,?bool $isVerified, ?int $limit, bool $execute)
@@ -70,6 +71,22 @@ class StoreRepository implements StoreRepositoryInterface {
             $store->save();
 
             $store->storeBalance()->create(['balance' =>0]);
+
+            DB::commit();
+
+            return $store;
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function updateVerifiedStatus(?string $id, ?bool $isVerified)
+    {
+        DB::beginTransaction();
+        try {
+            $store = Store::find($id);
+            $store->is_verified = $isVerified;
+            $store->save();
 
             DB::commit();
 

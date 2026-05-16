@@ -8,4 +8,5 @@ interface StoreRepositoryInterface
     public function getAllPaginated(?string $search, ?bool $isVerified,?int $rowPerPage);
     public function getById(?string $id);
     public function create(?array $data);
+    public function updateVerifiedStatus(?string $id, ?bool $isVerified);
 }
