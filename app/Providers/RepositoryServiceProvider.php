@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
-use App\Interfaces\StoreBalanceHistoryRepository;
+
 use App\Interfaces\StoreBalanceHistoryRepositoryInterface;
 use App\Interfaces\StoreBalanceRepositoryInterface;
 use App\Interfaces\StoreRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Repositories\StoreBalanceHistoryRepository;
 use App\Repositories\StoreBalanceRepository;
 use App\Repositories\StoreRepository;
 use App\Repositories\UserRepository;

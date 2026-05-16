@@ -33,6 +33,10 @@ class StoreBalanceHistory extends Model
         'remarks'
     ];
 
+    protected $casts = [
+        'amount' => 'decimal:2',
+    ];
+
     public function storeBalance(){
         return $this->belongsTo(StoreBalance::class);
     }

@@ -6,15 +6,18 @@ use App\Helpers\ResponseHelper;
 use App\Http\Resources\PaginateResource;
 use App\Http\Resources\StoreBalanceHistoryResource;
 use App\Interfaces\StoreBalanceHistoryRepositoryInterface;
+use App\Repositories\StoreBalanceHistoryRepository; // 🟢 1. IMPORT THE CONCRETE REPOSITORY CLASS
 use Illuminate\Http\Request;
 
 class StoreBalanceHistoryController extends Controller
 {
     private StoreBalanceHistoryRepositoryInterface $storeBalanceHistoryRepository;
 
-    public function __construct(StoreBalanceHistoryRepositoryInterface $storeBalanceHistoryRepository)
+    // 🟢 2. REMOVE THE TYPE-HINT INJECTION PARAMETER FROM THE CONSTRUCTOR
+    public function __construct()
     {
-        $this->storeBalanceHistoryRepository = $storeBalanceHistoryRepository;
+        // 🟢 3. INSTANTIATE THE REPOSITORY DIRECTLY BYPASSING THE BROKEN CONTAINER LOADER
+        $this->storeBalanceHistoryRepository = new StoreBalanceHistoryRepository();
     }
 
     /**
@@ -37,7 +40,6 @@ class StoreBalanceHistoryController extends Controller
 
     public function getAllPaginated(Request $request)
     {
-        // FIX: Store the validated array in a separate variable to avoid overwriting the Request object
         $validated = $request->validate([
             'search' => 'nullable|string',
             'row_per_page' => 'required|int',

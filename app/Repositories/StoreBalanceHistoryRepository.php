@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Interfaces;
+namespace App\Repositories; // 👈 FIXED: Changed from App\Interfaces to App\Repositories
 
+use App\Interfaces\StoreBalanceHistoryRepositoryInterface; // 👈 IMPORTED the interface
 use App\Models\StoreBalanceHistory;
 
 class StoreBalanceHistoryRepository implements StoreBalanceHistoryRepositoryInterface
