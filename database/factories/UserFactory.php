@@ -42,4 +42,17 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Configure the model factory lifecycle hook.
+     * This forces the UUID insertion during high-speed count loop generations.
+     */
+    public function configure(): static
+    {
+        return $this->afterMaking(function (User $user) {
+            if (empty($user->id)) {
+                $user->id = (string) Str::uuid();
+            }
+        });
+    }
 }

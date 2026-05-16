@@ -10,6 +10,20 @@ class Store extends Model
 {
     use UUID, HasFactory;
 
+    /**
+     * Tell Eloquent that the primary key is a string (UUID)
+     * 
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * Tell Eloquent NOT to try and auto-increment the ID
+     * 
+     * @var bool
+     */
+    public $incrementing = false;
+
     protected $fillable = [
         'user_id',
         'name',
@@ -21,7 +35,6 @@ class Store extends Model
         'address',
         'postal_code',
         'is_verified'
-
     ];
 
     protected $casts = [
@@ -30,11 +43,11 @@ class Store extends Model
 
     public function scopeSearch($query, $search)
     {
-    return $query->where('name', 'like', "%{$search}%")
-                 ->orWhere('phone', 'like', "%{$search}%");
+        return $query->where('name', 'like', "%{$search}%")
+                     ->orWhere('phone', 'like', "%{$search}%");
     }
 
-    //relationship one store has one user
+    // relationship one store has one user
     public function user() {
         return $this->belongsTo(User::class);
     }  

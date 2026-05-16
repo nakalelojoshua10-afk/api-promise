@@ -2,41 +2,49 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use App\Traits\UUID;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, UUID;
 
-    // Ensure this is exactly like this
+    /**
+     * 1. Tell Eloquent that the primary key is a string (UUID)
+     * 
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * 2. Tell Eloquent NOT to try and auto-increment the ID
+     * 
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'name',
         'email',
         'password',
     ];
-    
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
         'remember_token',
-        
     ];
-    
 
     /**
      * Get the attributes that should be cast.
@@ -51,18 +59,28 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Scope a query to search users by name or email.
+     */
     public function scopeSearch($query, $search)
     {
-    return $query->where('name', 'like', "%{$search}%")
-                 ->orWhere('email', 'like', "%{$search}%");
+        return $query->where('name', 'like', "%{$search}%")
+                     ->orWhere('email', 'like', "%{$search}%");
     }
 
-    //User can have one store relationship
-    public function store() {
+    /**
+     * User can have one store relationship
+     */
+    public function store() 
+    {
         return $this->hasOne(Store::class);
     }
     
-    public function buyer() {
+    /**
+     * User can have one buyer relationship
+     */
+    public function buyer() 
+    {
         return $this->hasOne(Buyer::class);
     }
 }

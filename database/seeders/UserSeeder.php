@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Database\Factories\UserFactory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str; // 👈 Make sure to add this import at the top
 
 class UserSeeder extends Seeder
 {
@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $admin = User::create([
+            'id' => (string) Str::uuid(), // 👈 Explicitly add this line
             'name' => 'Admin',
             'email' => 'admin@promise.com',
             'email_verified_at' => now(),

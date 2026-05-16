@@ -6,14 +6,15 @@ use App\Helpers\ImageHelper\ImageHelper;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str; // 👈 Imported Str utility
 
 /**
  * @extends Factory<Store>
  */
 class StoreFactory extends Factory
 {
-
     protected $model = Store::class;
+
     /**
      * Define the model's default state.
      *
@@ -21,7 +22,6 @@ class StoreFactory extends Factory
      */
     public function definition(): array
     {
-
         $imageHelper = new ImageHelper;
 
         return [
@@ -33,7 +33,6 @@ class StoreFactory extends Factory
                 250,
                 250
             ),
-
             'about' => $this->faker->paragraph(),
             'phone' => $this->faker->phoneNumber(),
             'address_id' => $this->faker->numberBetween(1, 100),
@@ -41,7 +40,19 @@ class StoreFactory extends Factory
             'address' => $this->faker->streetAddress(),
             'postal_code' => $this->faker->postcode(),
             'is_verified' => $this->faker->boolean(70)
-
         ];
+    }
+
+    /**
+     * Configure the model factory lifecycle hook.
+     * This force-injects the UUID right before the database insertion statement.
+     */
+    public function configure(): static
+    {
+        return $this->afterMaking(function (Store $store) {
+            if (empty($store->id)) {
+                $store->id = (string) Str::uuid();
+            }
+        });
     }
 }

@@ -4,10 +4,13 @@ namespace App\Traits;
 
 use Illuminate\Support\Str;
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Model
+ */
 trait UUID
 {
-    // Rename 'boot' to 'bootUUID'
-    protected static function bootUUID()
+    // 💡 Change 'bootUUID' to 'bootedUUID'
+    protected static function bootedUUID()
     {
         static::creating(function ($model) {
             if ($model->getKey() === null) {
