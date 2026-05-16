@@ -4,11 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Override;
 
-class StoreStoreRequest extends FormRequest
+class StoreUpdateRequest extends FormRequest
 {
-    
 
     /**
      * Get the validation rules that apply to the request.
@@ -18,9 +16,9 @@ class StoreStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
+
             'name' => 'required|string|max:255',
-            'logo' => 'required|mimes:png,jpg|max:2048',
+            'logo' => 'nullable|mimes:png,jpg|max:2048',
             'about' => 'required|string',
             'phone' => 'required|string',
             'address_id' => 'required',
