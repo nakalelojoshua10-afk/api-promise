@@ -17,9 +17,8 @@ Route::post('store/{id}/verified', [StoreController::class, 'updateVerifiedStatu
 Route::apiResource('store-balance', StoreBalanceController::class)->except(['store', 'update', 'destroy']);
 Route::get('store-balance/all/paginated', [StoreBalanceController::class, 'getAllPaginated']);
 
-// 💡 FIXED HERE: 
-// 1. Always place specific GET paths BEFORE the wildcard apiResource route
+// 1. Specific static GET paths must sit BEFORE wildcard resource macros
 Route::get('store-balance-history/all/paginated', [StoreBalanceHistoryController::class, 'getAllPaginated']);
 
-// 2. Add ->except() or explicitly list routes so the API compiler doesn't auto-generate broken bindings
-Route::apiResource('store-balance-history', StoreBalanceHistoryController::class)->only(['index', 'store']);
+// 💡 FIXED: Added 'show' to open up the dynamic single-record lookup route
+Route::apiResource('store-balance-history', StoreBalanceHistoryController::class)->only(['index', 'store', 'show']);

@@ -36,4 +36,9 @@ class StoreBalanceHistoryRepository implements StoreBalanceHistoryRepositoryInte
 
         return $query->paginate($rowPerPage);
     }
+
+    public function getById(?string $id)
+    {
+        return StoreBalanceHistory::find($id);
+    }
 }

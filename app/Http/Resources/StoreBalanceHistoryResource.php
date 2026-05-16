@@ -15,6 +15,7 @@ class StoreBalanceHistoryResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'store_balance' => new StoreBalanceResource($this->storeBalance),
             'type' => $this->type,
             'reference_id' => $this->reference_id,

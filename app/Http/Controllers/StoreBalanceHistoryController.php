@@ -75,7 +75,22 @@ class StoreBalanceHistoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+         try {
+            $storeBalanceHistory = $this->storeBalanceHistoryRepository->getById($id);
+
+            if (!$storeBalanceHistory) {
+                return ResponseHelper::jsonResponse(false, 'Data Riwayat Wallet Tidak Ditemukan', null, 404);
+            }
+
+            return ResponseHelper::jsonResponse(
+                true, 
+                'Data Riwayat Wallet Berhasil Diambil', 
+                new StoreBalanceHistoryResource($storeBalanceHistory), 
+                200
+            );
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        } 
     }
 
     /**
