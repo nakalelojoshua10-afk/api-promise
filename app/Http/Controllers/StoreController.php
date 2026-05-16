@@ -76,7 +76,22 @@ class StoreController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $store = $this->storeRepository->getById($id);
+
+            if (!$store) {
+                return ResponseHelper::jsonResponse(false, 'Data Store Tidak Ditemukan', null, 404);
+            }
+
+            return ResponseHelper::jsonResponse(
+                true, 
+                'Data Store Berhasil Diambil', 
+                new StoreResource($store), 
+                200
+            );
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }   
     }
 
     /**

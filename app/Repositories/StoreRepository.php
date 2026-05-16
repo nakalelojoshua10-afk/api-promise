@@ -40,4 +40,12 @@ class StoreRepository implements StoreRepositoryInterface {
 
         return $query->paginate($rowPerPage);
     }
+
+    public function getById(
+        ?string $id 
+    ){
+        $query = Store::where('id', $id);
+
+        return $query->first();
+    }
 }
