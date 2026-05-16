@@ -14,10 +14,16 @@ return new class extends Migration
         Schema::create('store_balance_histories', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('store_balance_id');
-            $table->foreign('store_balance_id')->references('id')->on('stores')->onDelete('cascade');
-            $table->enum('type', ['income', 'withdraw']);
-            $table->uuid('reference_id');
-            $table->string('reference_type');
+            
+            // 💡 FIXED: Changed ->on('stores') to ->on('store_balances')
+            $table->foreign('store_balance_id')
+                  ->references('id')
+                  ->on('store_balances') 
+                  ->onDelete('cascade');
+
+            $table->enum('type', ['income', 'withdraw', 'initial']);
+            $table->uuid('reference_id')->nullable();
+            $table->string('reference_type')->nullable();
             $table->decimal('amount', 26, 2);
             $table->string('remarks');
             $table->timestamps();

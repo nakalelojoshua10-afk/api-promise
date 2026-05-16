@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class StoreBalance extends Model
 {
@@ -29,10 +30,29 @@ class StoreBalance extends Model
         'balance'
     ];
 
-    // 💡 Fixed typo here: changed '$cast' to '$casts' (plural)
     protected $casts = [
         'balance' => 'decimal:2'
     ];
+
+    /**
+     * Intercept the lifecycle event sequence cleanly.
+     */
+    protected static function booted(): void
+    {
+        // 💡 FIXED: Changed 'created' to 'saved' to ensure parent model row exists first
+        static::saved(function (StoreBalance $storeBalance) {
+            
+            // Only generate the initial ledger history log if it doesn't already exist
+            if ($storeBalance->storeBalanceHistories()->count() === 0) {
+                $storeBalance->storeBalanceHistories()->create([
+                    'id' => (string) Str::uuid(),
+                    'type' => 'initial',
+                    'amount' => $storeBalance->balance,
+                    'remarks' => 'Pembuatan Store Baru',
+                ]);
+            }
+        });
+    }
 
     public function scopeSearch($query, $search) {
         return $query->whereHas('store', function ($q) use ($search) {

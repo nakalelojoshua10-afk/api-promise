@@ -3,11 +3,26 @@
 namespace App\Models;
 
 use App\Traits\UUID;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class StoreBalanceHistory extends Model
 {
-    use UUID;
+    use UUID, HasFactory;
+
+    /**
+     * Tell Eloquent that the primary key is a string (UUID)
+     * 
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * Tell Eloquent NOT to auto-increment the ID
+     * 
+     * @var bool
+     */
+    public $incrementing = false;
 
     protected $fillable = [
         'store_balance_id',
@@ -16,7 +31,6 @@ class StoreBalanceHistory extends Model
         'reference_type',
         'amount',
         'remarks'
-
     ];
 
     public function storeBalance(){
