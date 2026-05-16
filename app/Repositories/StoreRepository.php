@@ -54,7 +54,7 @@ class StoreRepository implements StoreRepositoryInterface {
     public function create(
         ?array $data
     ){
-        DB::beginTranscation();
+        DB::beginTransaction();
 
         try {
             $store = new Store;
