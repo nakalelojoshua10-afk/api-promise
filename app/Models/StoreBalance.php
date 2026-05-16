@@ -18,6 +18,12 @@ class StoreBalance extends Model
         'balance' => 'decimal:2'
     ];
 
+    public function scopeSearch($query, $search) {
+        return $query->whereHas('store', function ($q) use ($search) {
+            $q->where('name', 'like', '%' . $search . '%');
+        });
+    }
+
     //store balance is owned by one store
 
     public function store() {
