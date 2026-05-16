@@ -125,4 +125,21 @@ class StoreRepository implements StoreRepositoryInterface {
             throw new Exception($e->getMessage());
         }
     }
+
+    public function delete(?string $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $store = Store::find($id);
+            $store->delete();
+
+            DB::commit();
+            
+            return $store;
+            
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
 }
