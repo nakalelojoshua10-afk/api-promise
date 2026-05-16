@@ -65,4 +65,27 @@ class StoreBalanceHistoryRepository implements StoreBalanceHistoryRepositoryInte
             throw new \Exception("Repository Error: " . $e->getMessage());
         }
     }
+
+    public function update(?string $id, array $data)
+    {
+        DB::beginTransaction();
+
+        try {
+            $storeBalanceHistory = StoreBalanceHistory::find($id);
+            $storeBalanceHistory->update([
+                'type' => $data['type'],
+                'reference_id' => $data['reference_id'], 
+                'reference_type' => $data['reference_type'],
+                'amount' => $data['amount'],
+                'remaks' => $data['remarks'],
+            ]);
+
+            DB::commit();
+            return $storeBalanceHistory;
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Repository Error: " . $e->getMessage());
+        }
+    }
 }

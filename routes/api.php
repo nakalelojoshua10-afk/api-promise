@@ -21,4 +21,4 @@ Route::get('store-balance/all/paginated', [StoreBalanceController::class, 'getAl
 Route::get('store-balance-history/all/paginated', [StoreBalanceHistoryController::class, 'getAllPaginated']);
 
 // 💡 FIXED: Added 'show' to open up the dynamic single-record lookup route
-Route::apiResource('store-balance-history', StoreBalanceHistoryController::class)->only(['index', 'store', 'show']);
+Route::apiResource('store-balance-history', StoreBalanceHistoryController::class)->only(['index', 'store', 'show'])->except(['store', 'update', 'destroy']);
